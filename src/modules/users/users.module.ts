@@ -6,10 +6,7 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([User]),
-    JwtModule.register({ secret: 'hard!to-guess_secret' }),
-  ],
+  imports: [TypeOrmModule.forFeature([User]), JwtModule.register({ secret: 'hard!to-guess_secret' })],
   controllers: [UsersController],
   providers: [UsersService],
   exports: [UsersService],

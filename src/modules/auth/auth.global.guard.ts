@@ -3,6 +3,7 @@ import { IUserTokenBody } from '@module/users/dto/user-token-body.dto';
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
 import { UsersService } from './../users/users.service';
+import { globalRoute } from 'src/constant/APIConstant';
 
 @Injectable()
 export class DefaultAuthGuard implements CanActivate {
@@ -10,13 +11,17 @@ export class DefaultAuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
+    const requestUrl = request.originalUrl;
+    if (globalRoute.includes(requestUrl)) {
+      return true;
+    }
+
     const token = this.extractTokenFromHeader(request);
     if (!token) {
       throw new UnauthorizedException();
     }
 
-    const path = request.originalUrl;
-    if (!this.validateRequest(path, token)) {
+    if (!this.validateRequest(requestUrl, token)) {
       throw new ForbiddenException();
     }
 

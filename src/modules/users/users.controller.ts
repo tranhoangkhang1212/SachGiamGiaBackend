@@ -1,28 +1,16 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
-} from '@nestjs/common';
-import { UsersService } from './users.service';
+import { ActionResponseDto } from '@common/response/action-response.dto';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { CreateUserRequestDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserResponseDto } from './dto/userResponse.dto';
-import { ActionResponseDto } from '@common/response/action-response.dto';
-import { AuthGuard } from '@module/auth/auth.guard';
+import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(
-    @Body() createUserDto: CreateUserRequestDto,
-  ): Promise<ActionResponseDto> {
+  create(@Body() createUserDto: CreateUserRequestDto): Promise<ActionResponseDto> {
     return this.usersService.create(createUserDto);
   }
 

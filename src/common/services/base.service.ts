@@ -30,8 +30,7 @@ export abstract class BaseService {
 
   async findOne(id: number) {
     const found = await this._model.findOne(id);
-    if (!found || !found.id)
-      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+    if (!found || !found.id) throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     return found;
   }
 
@@ -46,11 +45,7 @@ export abstract class BaseService {
     return await this._model.delete(id);
   }
 
-  async findAll(
-    options: OptionsModel = { where: {}, relations: [], order: {} },
-    limit = 100,
-    offset = 0,
-  ) {
+  async findAll(options: OptionsModel = { where: {}, relations: [], order: {} }, limit = 100, offset = 0) {
     const [rows, count] = await this._model.findAndCount({
       where: options.where,
       relations: options.relations,
@@ -78,8 +73,7 @@ export abstract class BaseService {
   }
 
   existsThrowException(entity: BaseEntity, message = '') {
-    if (!entity || !entity.hasId())
-      throw new NotFoundException(`Not found ${message}`);
+    if (!entity || !entity.hasId()) throw new NotFoundException(`Not found ${message}`);
   }
 
   async findByIds(ids: number[]) {
