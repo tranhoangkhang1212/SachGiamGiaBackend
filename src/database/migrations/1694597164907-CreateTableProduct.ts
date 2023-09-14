@@ -18,7 +18,7 @@ export class CreateTableProduct1694597164907 implements MigrationInterface {
           { name: 'name', type: 'varchar', isNullable: false },
           { name: 'slug', type: 'varchar', isNullable: false },
           { name: 'image', type: 'varchar', isNullable: false },
-          { name: 'author', type: 'varchar', isNullable: false },
+          { name: 'author_id', type: 'varchar', isNullable: false },
           { name: 'publisher', type: 'varchar', isNullable: false },
           { name: 'category_id', type: 'varchar', isNullable: false },
           { name: 'price', type: 'float8', isNullable: false },

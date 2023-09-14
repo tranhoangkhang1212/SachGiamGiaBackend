@@ -12,6 +12,7 @@ import { ProductModule } from './modules/product/product.module';
 import { CategoryModule } from './modules/category/category.module';
 import { SidebarModule } from './modules/sidebar/sidebar.module';
 import { AuthorModule } from './modules/author/author.module';
+import { PublisherModule } from './modules/publisher/publisher.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { AuthorModule } from './modules/author/author.module';
     CategoryModule,
     SidebarModule,
     AuthorModule,
+    PublisherModule,
   ],
   controllers: [AppController],
   providers: [
