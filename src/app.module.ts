@@ -13,6 +13,8 @@ import { CategoryModule } from './modules/category/category.module';
 import { SidebarModule } from './modules/sidebar/sidebar.module';
 import { AuthorModule } from './modules/author/author.module';
 import { PublisherModule } from './modules/publisher/publisher.module';
+import { DistributorsModule } from './modules/distributors/distributors.module';
+import { FileUploadModule } from './modules/file-upload/file-upload.module';
 
 @Module({
   imports: [
@@ -29,6 +31,8 @@ import { PublisherModule } from './modules/publisher/publisher.module';
     SidebarModule,
     AuthorModule,
     PublisherModule,
+    DistributorsModule,
+    FileUploadModule,
   ],
   controllers: [AppController],
   providers: [

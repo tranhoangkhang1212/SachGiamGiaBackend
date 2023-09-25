@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "command": "yarn start:dev",
+            "command": "yarn start:debug",
             "name": "Run Start DEV",
             "request": "launch",
             "type": "node-terminal"

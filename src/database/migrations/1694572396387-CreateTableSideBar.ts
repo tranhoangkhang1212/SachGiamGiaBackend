@@ -18,6 +18,8 @@ export class CreateTableSideBar1694572396387 implements MigrationInterface {
           { name: 'slug', type: 'varchar', isNullable: false },
           { name: 'category', type: 'jsonb', isNullable: false },
           { name: 'products', type: 'jsonb', isNullable: false },
+          { name: 'sub_menu', type: 'jsonb', isNullable: false },
+          { name: 'type', type: 'varchar', isNullable: false },
           {
             name: 'created_at',
             type: 'timestamp',
@@ -33,8 +35,8 @@ export class CreateTableSideBar1694572396387 implements MigrationInterface {
           {
             name: 'deleted_at',
             type: 'timestamp',
-            isNullable: false,
-            default: 'NOW()',
+            isNullable: true,
+            default: 'null',
           },
         ],
       }),
@@ -43,6 +45,6 @@ export class CreateTableSideBar1694572396387 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('side_bar');
+    throw new Error('Method not implemented.');
   }
 }

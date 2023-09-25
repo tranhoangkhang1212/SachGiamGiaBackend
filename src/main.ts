@@ -1,10 +1,9 @@
+import { DefaultAuthGuard } from '@module/auth/auth.global.guard';
+import { UsersService } from '@module/users/users.service';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { DefaultAuthGuard } from '@module/auth/auth.global.guard';
-import { UsersService } from '@module/users/users.service';
-import { JwtService } from '@nestjs/jwt';
+import { HttpExceptionFilter } from './exception/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,16 +11,10 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix('api');
   app.useGlobalGuards(new DefaultAuthGuard(app.get(UsersService)));
-
-  const options = new DocumentBuilder()
-    .setTitle('Dashboard Management')
-    .setDescription('Dashboard For User Management')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .build();
-
-  const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('api', app, document);
+  app.useGlobalFilters(new HttpExceptionFilter());
+  app.enableCors({
+    origin: ['http://localhost:3000', 'http://localhost:3002'],
+  });
 
   const port = process.env.PORT;
   await app.listen(port);

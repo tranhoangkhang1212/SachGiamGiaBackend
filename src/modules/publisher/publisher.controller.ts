@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { PublisherService } from './publisher.service';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { CreatePublisherDto } from './dto/create-publisher.dto';
-import { UpdatePublisherDto } from './dto/update-publisher.dto';
+import { PublisherService } from './publisher.service';
+import { FindAllRequestDto } from '@module/author/dto/find-all-request.dto';
 
 @Controller('publisher')
 export class PublisherController {
@@ -13,22 +13,7 @@ export class PublisherController {
   }
 
   @Get()
-  findAll() {
-    return this.publisherService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.publisherService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePublisherDto: UpdatePublisherDto) {
-    return this.publisherService.update(+id, updatePublisherDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.publisherService.remove(+id);
+  findAll(@Query() requestDto: FindAllRequestDto) {
+    return this.publisherService.findAllPublisher(requestDto);
   }
 }

@@ -1,9 +1,9 @@
-import { ERole } from '@module/role/role.enum';
+import { ERole } from '@common/role/role.enum';
 import { IUserTokenBody } from '@module/users/dto/user-token-body.dto';
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
 import { UsersService } from './../users/users.service';
-import { globalRoute } from 'src/constant/APIConstant';
+import { globalRoutes } from 'src/constant/APIConstant';
 
 @Injectable()
 export class DefaultAuthGuard implements CanActivate {
@@ -12,7 +12,7 @@ export class DefaultAuthGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const requestUrl = request.originalUrl;
-    if (globalRoute.includes(requestUrl)) {
+    if (globalRoutes.includes(requestUrl)) {
       return true;
     }
 
@@ -29,8 +29,8 @@ export class DefaultAuthGuard implements CanActivate {
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
+    const [type, token] = request.headers.authorization?.split('||') ?? [];
+    return type === 'token' ? token : undefined;
   }
 
   private validateRequest(path: string, token: string): boolean {

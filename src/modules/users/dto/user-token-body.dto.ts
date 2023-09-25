@@ -1,4 +1,4 @@
-import { ERole } from '@module/role/role.enum';
+import { ERole } from '@common/role/role.enum';
 
 export interface IUserTokenBody {
   name: string;

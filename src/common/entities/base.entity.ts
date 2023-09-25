@@ -21,7 +21,7 @@ export abstract class BaseEntityApp extends BaseEntity {
   @DeleteDateColumn({
     type: 'timestamp',
     name: 'deleted_at',
-    default: () => 'CURRENT_TIMESTAMP(6)',
+    default: () => 'null',
   })
   deletedAt: Date;
 }

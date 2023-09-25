@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Logger, NotFoundException } from '@nestjs/common';
 import { BaseEntity } from 'typeorm';
 
 import { OptionsModel } from '@common/models/options.model';
@@ -6,6 +6,7 @@ import { OptionsModel } from '@common/models/options.model';
 export abstract class BaseService {
   protected _entity;
   protected _model;
+  protected readonly logger = new Logger(BaseService.name);
 
   async save(input: any) {
     const newInstance = await this._model.create({ ...input });
@@ -14,21 +15,26 @@ export abstract class BaseService {
   }
 
   async createAndSave(input: any) {
-    const newInstance = await this._model.create({ ...input });
-    await this._model.save(newInstance);
-    return newInstance;
+    try {
+      const newInstance = await this._model.create({ ...input });
+      await this._model.save(newInstance);
+      return newInstance;
+    } catch (error) {
+      this.logger.error('error');
+      throw new HttpException((error as HttpException).stack, HttpStatus.BAD_REQUEST);
+    }
   }
 
-  async createEntity(input: any) {
+  async create(input: any) {
     return await this._model.create({ ...input });
   }
 
-  async findById(id: number) {
+  async findById(id: string) {
     const found = await this._model.findOne(id);
     return found;
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const found = await this._model.findOne(id);
     if (!found || !found.id) throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     return found;
@@ -45,17 +51,18 @@ export abstract class BaseService {
     return await this._model.delete(id);
   }
 
-  async findAll(options: OptionsModel = { where: {}, relations: [], order: {} }, limit = 100, offset = 0) {
+  async findAll(options: OptionsModel = { where: {}, relations: [], order: {} }, pageSize = 10, page = 0) {
     const [rows, count] = await this._model.findAndCount({
       where: options.where,
       relations: options.relations,
       order: options.order,
-      take: limit,
-      skip: offset,
+      skip: (page - 1) * pageSize,
+      take: pageSize,
     });
     return {
       rows,
       count,
+      page,
     };
   }
 

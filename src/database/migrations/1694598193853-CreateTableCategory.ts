@@ -31,8 +31,8 @@ export class CreateTableCategory1694598193853 implements MigrationInterface {
           {
             name: 'deleted_at',
             type: 'timestamp',
-            isNullable: false,
-            default: 'NOW()',
+            isNullable: true,
+            default: 'null',
           },
         ],
       }),
@@ -40,5 +40,7 @@ export class CreateTableCategory1694598193853 implements MigrationInterface {
     );
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {}
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
 }

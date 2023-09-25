@@ -1,1 +1,1 @@
-export const globalRoute = ['/api/layout'];
+export const globalRoutes = ['/api/layout'];
