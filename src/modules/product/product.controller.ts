@@ -1,5 +1,5 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Query } from '@nestjs/common';
-import { FilterProductRequestDto } from './dto/filter-product-request.dto';
+import { FilterProductRequestDto, SearchProductRequestDto } from './dto/filter-product-request.dto';
 import { FindAllProductRequestDto } from './dto/find-all-product-request.dto';
 import { SidebarSearchRequestDto } from './dto/sidebar-search-request.dto';
 import { ProductService } from './product.service';
@@ -37,5 +37,10 @@ export class ProductController {
   @Get('category')
   getByCategory(@Query() request: FilterProductRequestDto) {
     return this.productService.getByCategory(request);
+  }
+
+  @Get('search')
+  searchProducts(@Query() request: SearchProductRequestDto) {
+    return this.productService.searchProducts(request);
   }
 }

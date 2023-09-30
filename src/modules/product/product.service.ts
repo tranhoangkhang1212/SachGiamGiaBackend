@@ -1,30 +1,31 @@
+import { PaginationDto } from '@common/dto/pagination';
 import { PaginationResponseDto } from '@common/dto/pagination-response.dto';
 import { BaseService } from '@common/services/base.service';
 import { FindAllResponseDto } from '@module/auth/dto/find-all-response.dto';
+import { FileUploadService } from '@module/file-upload/file-upload.service';
 import { Sidebar } from '@module/sidebar/entities/sidebar.entity';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import slugify from 'slugify';
 import { EFilterData } from 'src/constant/enum/filter-data';
+import { EProductSort } from 'src/constant/enum/product-enum';
 import { ProductFilter } from 'src/constant/enum/product-filter';
 import { EStatus } from 'src/constant/enum/status-eum';
 import { RequestInvalidException } from 'src/exception/request-invalid.exception';
 import { getPageResponse, getSkipAndTake } from 'src/utils/pagination-util';
+import * as unorm from 'unorm';
 import { SidebarRepository } from './../sidebar/sidebar.repository';
 import { CreateMultipleProductsRequestDto, CreateProductDto } from './dto/create-product.dto';
+import { DeleteProductRequestDto } from './dto/delete-product-request.dto';
 import { TSortType, priceValuesFilter } from './dto/filter-data-constant';
-import { FilterProductRequestDto } from './dto/filter-product-request.dto';
+import { FilterProductRequestDto, SearchProductRequestDto } from './dto/filter-product-request.dto';
 import { FindAllProductRequestDto, GetProductOptionRequestDto } from './dto/find-all-product-request.dto';
 import { ProductDetailResponseDto, ProductResponseDto, ShortProductResponseDto } from './dto/products-response';
 import { FilterListProductRequestDto, SidebarSearchRequestDto } from './dto/sidebar-search-request.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
+import { ImageModel } from './entities/images.model';
 import { Product } from './entities/product.entity';
 import { ProductRepository } from './product.repository';
-import { EProductSort } from 'src/constant/enum/product-enum';
-import { ImageModel } from './entities/images.model';
-import { PaginationDto } from '@common/dto/pagination';
-import { DeleteProductRequestDto } from './dto/delete-product-request.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
-import { FileUploadService } from '@module/file-upload/file-upload.service';
 import { getTimeStamp } from 'src/utils/date-time-utils';
 
 @Injectable()
@@ -79,28 +80,16 @@ export class ProductService extends BaseService {
   async update(requestDto: UpdateProductDto) {
     const { id, description } = requestDto;
     const product = await this.productRepository.findOne({ where: { id } });
-    // if (!product) {
-    //   throw new RequestInvalidException('PRODUCT_NOT_FOUND');
-    // }
-
-    // if (description) {
-    //   const fileName = product.slug + getTimeStamp() + '.json';
-    //   this.fileUploadService.uploadFileWithContent(description, fileName);
-    //   product.description = fileName;
-    // }
-    const fileBuffer = await this.fileUploadService.getJsonFileFromMinio(product.description);
-
-    if (fileBuffer !== null) {
-      try {
-        console.log(fileBuffer.toString('utf8'));
-      } catch (error) {
-        console.error('Error parsing JSON content:', error);
-        return null;
-      }
-    } else {
-      return null;
+    if (!product) {
+      throw new RequestInvalidException('PRODUCT_NOT_FOUND');
     }
-    // return this.productRepository.save(product);
+
+    if (description) {
+      const fileName = product.slug + getTimeStamp() + '.json';
+      this.fileUploadService.uploadFileWithContent(description, fileName);
+      product.description = fileName;
+    }
+    return this.productRepository.save(product);
   }
 
   async delete(requestDto: DeleteProductRequestDto) {
@@ -303,6 +292,26 @@ export class ProductService extends BaseService {
       .andWhere('Product.status = :status', { status: EStatus.Enable })
       .limit(limit ? limit : 99999999)
       .getMany();
+  }
+
+  async searchProducts(request: SearchProductRequestDto) {
+    const { keyword } = request;
+    if (!keyword) {
+      return [];
+    }
+    const products = await this.productRepository
+      .createQueryBuilder()
+      .select([
+        'Product.id',
+        'Product.name',
+        'Product.price',
+        'Product.saleOff',
+        'Product.finalPrice',
+        'Product.images',
+      ])
+      .where('unaccent(Product.name) ILIKE unaccent(:keyword)', { keyword: `%${unorm.nfkd(keyword)}%` })
+      .getMany();
+    return products;
   }
 
   responseHandler(products: Product[]): ProductResponseDto[] {

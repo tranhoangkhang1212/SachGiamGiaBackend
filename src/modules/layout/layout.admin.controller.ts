@@ -34,10 +34,10 @@ export class AdminLayoutController {
     return this.layoutService.getAllHomeProductsByAdmin();
   }
 
-  @Put('home-product-show-products')
-  async updateHomeProductShow(@Body() requestDto: UpdateHomeProductShowRequestDto) {
-    return this.layoutService.updateHomeProductShow(requestDto);
-  }
+  // @Put('home-product-show-products')
+  // async updateHomeProductShow(@Body() requestDto: UpdateHomeProductShowRequestDto) {
+  //   return this.layoutService.updateHomeProductShow(requestDto);
+  // }
 
   @Get('banners')
   async getAllBanners() {

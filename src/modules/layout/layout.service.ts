@@ -73,7 +73,7 @@ export class LayoutService extends BaseService {
     return this.layoutRepository.save(layout);
   }
 
-  async updateHomeProductShow(requestDto: UpdateHomeProductShowRequestDto) {}
+  // async updateHomeProductShow(requestDto: UpdateHomeProductShowRequestDto) {}
 
   async getAllHomeProductsByAdmin(): Promise<SidebarPageResponseDto[]> {
     const { homeProducts } = await this.layoutRepository.findOne();
