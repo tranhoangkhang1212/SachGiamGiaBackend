@@ -39,9 +39,9 @@ export class UsersService extends BaseService {
     return responseDto;
   }
 
-  async getUserDataFromToken(token: string): Promise<IUserTokenBody> {
+  getUserDataFromToken(token: string): IUserTokenBody {
     try {
-      return (await this.jwtService.decode(token)) as IUserTokenBody;
+      return this.jwtService.decode(token) as IUserTokenBody;
     } catch (error) {
       console.log(error);
       throw new ForbiddenException();
