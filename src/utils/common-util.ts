@@ -1,6 +1,6 @@
-import { parse, basename } from 'path';
+import { parse } from 'path';
 import slugify from 'slugify';
-import { v4 as uuidv4 } from 'uuid';
+import { getTimeStamp } from './date-time-utils';
 
 export const slugGenerate = (value: string) => {
   return slugify(value, { trim: true, lower: true });
@@ -20,9 +20,8 @@ export const generateFileUrl = (originalname: string) => {
   const bucketName = process.env.MINIO_BUCKET_NAME;
   const endPoint = process.env.MINIO_ENDPOINT;
   const port = process.env.MINIO_PORT;
-  const timeStamp = new Date().getTime();
   const { name, ext } = parse(originalname);
-  const fileName = `${name}_${timeStamp}${ext}`;
+  const fileName = `${name}_${getTimeStamp()}${ext}`;
 
   const protocol = env === 'local' ? 'http' : 'https';
   const baseUrl = `${endPoint}:${port}/${bucketName}/${fileName}`;
@@ -31,5 +30,10 @@ export const generateFileUrl = (originalname: string) => {
   return {
     fileName,
     url,
+    ext,
   };
+};
+
+export const createArrayWithLength = <T>(size: number, callBack: () => T) => {
+  return [...Array(size)].map(callBack);
 };

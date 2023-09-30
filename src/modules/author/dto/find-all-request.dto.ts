@@ -1,6 +1,6 @@
-import { PaginationRequestDto } from '@common/dto/pagination';
+import { PaginationDto } from '@common/dto/pagination';
 
 type SortType = 'ASC' | 'DESC';
-export class FindAllRequestDto extends PaginationRequestDto {
+export class FindAllRequestDto extends PaginationDto {
   order: Record<string, SortType>;
 }

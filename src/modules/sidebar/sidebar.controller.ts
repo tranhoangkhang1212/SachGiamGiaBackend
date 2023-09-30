@@ -1,18 +1,17 @@
-import { Body, Controller, Get, Post, ValidationPipe } from '@nestjs/common';
-import { CreateSidebarDto } from './dto/create-sidebar.dto';
+import { Controller, Get } from '@nestjs/common';
 import { SidebarService } from './sidebar.service';
 
 @Controller('sidebar')
 export class SidebarController {
   constructor(private readonly sidebarService: SidebarService) {}
 
-  @Post()
-  create(@Body(new ValidationPipe({ whitelist: true })) createSidebarDto: CreateSidebarDto) {
-    return this.sidebarService.create(createSidebarDto);
+  @Get()
+  async getAll() {
+    return this.sidebarService.getAll();
   }
 
-  @Get()
-  getAll() {
-    return this.sidebarService.getAll();
+  @Get('filter')
+  async getSidebarFilter() {
+    return this.sidebarService.getSidebarFilter();
   }
 }

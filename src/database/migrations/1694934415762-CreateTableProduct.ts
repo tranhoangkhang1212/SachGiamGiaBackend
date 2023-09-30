@@ -18,7 +18,7 @@ export class CreateTableProduct1694597164907 implements MigrationInterface {
           { name: 'name', type: 'varchar', isNullable: false },
           { name: 'sub_id', type: 'varchar', isNullable: true },
           { name: 'slug', type: 'varchar', isNullable: false },
-          { name: 'image', type: 'varchar', isNullable: false },
+          { name: 'images', type: 'jsonb', isNullable: false },
           { name: 'author_id', type: 'uuid', isNullable: false },
           { name: 'publisher_id', type: 'uuid', isNullable: false },
           { name: 'category_id', type: 'uuid', isNullable: false },
@@ -30,6 +30,7 @@ export class CreateTableProduct1694597164907 implements MigrationInterface {
           { name: 'total_buy', type: 'int8', isNullable: false, default: 0 },
           { name: 'star', type: 'int4', isNullable: false, default: 0 },
           { name: 'description', type: 'varchar', isNullable: false },
+          { name: 'statistics', type: 'varchar', isNullable: false },
           {
             name: 'created_at',
             type: 'timestamp',

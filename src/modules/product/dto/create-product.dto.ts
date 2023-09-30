@@ -1,11 +1,11 @@
-import { IsNotEmpty, IsNumber, IsUUID } from 'class-validator';
+import { IsArray, IsNotEmpty, IsNumber, IsUUID } from 'class-validator';
 
 export class CreateProductDto {
   @IsNotEmpty()
   name: string;
 
-  @IsNotEmpty()
-  image: string;
+  @IsArray()
+  images: string[];
 
   @IsUUID(undefined, { each: true })
   author: string;
@@ -30,5 +30,11 @@ export class CreateProductDto {
 
   description: string;
 
+  statistics: string;
+
   subId: string;
+}
+
+export class CreateMultipleProductsRequestDto {
+  products: CreateProductDto[];
 }

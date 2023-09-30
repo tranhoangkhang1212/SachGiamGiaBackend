@@ -3,7 +3,9 @@ import { Author } from '@module/author/entities/author.entity';
 import { Category } from '@module/category/entities/category.entity';
 import { Distributor } from '@module/distributors/entities/distributor.entity';
 import { Publisher } from '@module/publisher/entities/publisher.entity';
+import { EStatus } from 'src/constant/enum/status-eum';
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
+import { ImageModel } from './images.model';
 
 @Entity('product')
 export class Product extends BaseEntityApp {
@@ -16,8 +18,8 @@ export class Product extends BaseEntityApp {
   @Column({ type: 'varchar', name: 'slug', nullable: false })
   slug: string;
 
-  @Column({ type: 'varchar', name: 'image', nullable: false })
-  image: string;
+  @Column({ type: 'jsonb', name: 'images', nullable: false })
+  images: ImageModel[];
 
   @OneToOne(() => Author, { cascade: true })
   @JoinColumn({ name: 'author_id' })
@@ -55,4 +57,10 @@ export class Product extends BaseEntityApp {
 
   @Column({ type: 'varchar', name: 'description', nullable: true })
   description: string;
+
+  @Column({ type: 'varchar', name: 'status', nullable: true })
+  status: EStatus = EStatus.Enable;
+
+  @Column({ type: 'varchar', name: 'statistics', nullable: true })
+  statistics: string;
 }

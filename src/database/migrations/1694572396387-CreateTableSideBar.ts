@@ -17,9 +17,13 @@ export class CreateTableSideBar1694572396387 implements MigrationInterface {
           { name: 'name', type: 'varchar', isNullable: false },
           { name: 'slug', type: 'varchar', isNullable: false },
           { name: 'category', type: 'jsonb', isNullable: false },
+          { name: 'authors', type: 'jsonb', isNullable: false },
+          { name: 'publishers', type: 'jsonb', isNullable: false },
+          { name: 'distributors', type: 'jsonb', isNullable: false },
           { name: 'products', type: 'jsonb', isNullable: false },
           { name: 'sub_menu', type: 'jsonb', isNullable: false },
           { name: 'type', type: 'varchar', isNullable: false },
+          { name: 'status', type: 'varchar', isNullable: false },
           {
             name: 'created_at',
             type: 'timestamp',

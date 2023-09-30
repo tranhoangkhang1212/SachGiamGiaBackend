@@ -13,7 +13,16 @@ export class Sidebar extends BaseEntityApp {
   @Column({ type: 'jsonb', name: 'category', nullable: false })
   category: string[];
 
-  @Column({ type: 'jsonb', name: 'products', nullable: true })
+  @Column({ type: 'jsonb', name: 'authors', nullable: false })
+  authors: string[];
+
+  @Column({ type: 'jsonb', name: 'publishers', nullable: false })
+  publishers: string[];
+
+  @Column({ type: 'jsonb', name: 'distributors', nullable: false })
+  distributors: string[];
+
+  @Column({ type: 'jsonb', name: 'products', nullable: false })
   products: string[];
 
   @Column({ type: 'jsonb', name: 'sub_menu', nullable: true })

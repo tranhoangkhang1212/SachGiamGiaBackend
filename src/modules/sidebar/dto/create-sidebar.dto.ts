@@ -5,11 +5,23 @@ export class CreateSidebarDto {
   @IsNotEmpty()
   name: string;
 
+  @IsNotEmpty()
+  slug: string;
+
   @IsArray()
   category: string[] = [];
 
   @IsArray()
   products: string[] = [];
+
+  @IsArray()
+  authors: string[] = [];
+
+  @IsArray()
+  publishers: string[] = [];
+
+  @IsArray()
+  distributors: string[] = [];
 
   @IsArray()
   subMenu: string[] = [];

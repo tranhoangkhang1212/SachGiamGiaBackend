@@ -3,8 +3,8 @@ import { AuthorService } from './author.service';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { FindAllRequestDto } from './dto/find-all-request.dto';
 
-@Controller('author')
-export class AuthorController {
+@Controller('admin/author')
+export class AdminAuthorController {
   constructor(private readonly authorService: AuthorService) {}
 
   @Post()

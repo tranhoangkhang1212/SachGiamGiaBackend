@@ -15,6 +15,9 @@ import { AuthorModule } from './modules/author/author.module';
 import { PublisherModule } from './modules/publisher/publisher.module';
 import { DistributorsModule } from './modules/distributors/distributors.module';
 import { FileUploadModule } from './modules/file-upload/file-upload.module';
+import { ResourceModule } from './modules/resource/resource.module';
+import { LayoutModule } from './modules/layout/layout.module';
+import { AdminUserModule } from './modules/admin-user/admin-user.module';
 
 @Module({
   imports: [
@@ -33,6 +36,9 @@ import { FileUploadModule } from './modules/file-upload/file-upload.module';
     PublisherModule,
     DistributorsModule,
     FileUploadModule,
+    ResourceModule,
+    LayoutModule,
+    AdminUserModule,
   ],
   controllers: [AppController],
   providers: [

@@ -1,8 +1,8 @@
+import { PaginationResponseDto } from '@common/dto/pagination-response.dto';
 import { ProductFilter } from 'src/constant/enum/product-filter';
-import { ProductDetailResponseDto } from './products-response';
 
-export class SidebarDetailResponseDto {
-  products: ProductDetailResponseDto[];
+export class SidebarDetailResponseDto<T> {
+  product: PaginationResponseDto<T>;
   filters: ProductFilterData[];
 }
 

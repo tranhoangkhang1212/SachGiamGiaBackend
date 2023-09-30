@@ -3,8 +3,8 @@ import { CreatePublisherDto } from './dto/create-publisher.dto';
 import { PublisherService } from './publisher.service';
 import { FindAllRequestDto } from '@module/author/dto/find-all-request.dto';
 
-@Controller('publisher')
-export class PublisherController {
+@Controller('admin/publisher')
+export class AdminPublisherController {
   constructor(private readonly publisherService: PublisherService) {}
 
   @Post()

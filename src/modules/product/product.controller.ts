@@ -1,10 +1,8 @@
-import { Body, Controller, Get, Param, Post, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { CreateProductDto } from './dto/create-product.dto';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Query } from '@nestjs/common';
 import { FilterProductRequestDto } from './dto/filter-product-request.dto';
+import { FindAllProductRequestDto } from './dto/find-all-product-request.dto';
 import { SidebarSearchRequestDto } from './dto/sidebar-search-request.dto';
 import { ProductService } from './product.service';
-import { FindAllProductRequestDto } from './dto/find-all-product-request.dto';
 
 @Controller('product')
 export class ProductController {
@@ -15,25 +13,20 @@ export class ProductController {
     return this.productService.findAllProducts(requestDto);
   }
 
-  @Post('/create')
-  create(@Body() createProductDto: CreateProductDto) {
-    return this.productService.create(createProductDto);
-  }
-
-  @Post('/create-multiple')
-  @UseInterceptors(FileInterceptor('file'))
-  createMultiple(@UploadedFile() file: Express.Multer.File) {
-    return this.productService.createMultiple(file);
-  }
-
   @Get('detail/:slug')
   getDetail(@Param('slug') slug: string) {
     return this.productService.getProductDetail(slug);
   }
 
-  @Get('side-bar')
-  getForSidebar(@Query() request: SidebarSearchRequestDto) {
-    return this.productService.findAllForSidebar(request);
+  @Get('same-author/:slug')
+  getSameAuthor(@Param('slug') slug: string) {
+    return this.productService.getSameAuthor(slug);
+  }
+
+  @Post('side-bar')
+  @HttpCode(HttpStatus.OK)
+  getForSidebar(@Body() requestBody: SidebarSearchRequestDto) {
+    return this.productService.findAllForSidebar(requestBody);
   }
 
   @Get('author')

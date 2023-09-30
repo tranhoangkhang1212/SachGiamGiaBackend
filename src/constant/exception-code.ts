@@ -13,7 +13,12 @@ export type TErrorKey =
   | 'SIDE_BAR_NOT_FOUND'
   | 'SIDE_BAR_SUB_MENU_NOT_FOUND'
   | 'DISTRIBUTOR_NAME_ALREADY_EXISTS'
-  | 'CREATE_MULTIPLE_PRODUCTS_ERROR';
+  | 'CREATE_MULTIPLE_PRODUCTS_ERROR'
+  | 'FILE_TYPE_UPLOAD_NOT_ACCEPT'
+  | 'RESOURCE_NOT_FOUND'
+  | 'LAYOUT_NOT_FOUND'
+  | 'USER_NOT_FOUND'
+  | 'PRODUCT_NOT_FOUND';
 
 export const ExceptionCode: Record<TErrorKey, IExceptionMsg> = {
   DEFAULT_ERROR_MESSAGE: {
@@ -55,5 +60,25 @@ export const ExceptionCode: Record<TErrorKey, IExceptionMsg> = {
   CREATE_MULTIPLE_PRODUCTS_ERROR: {
     code: 1009,
     message: 'Create multiple products error',
+  },
+  FILE_TYPE_UPLOAD_NOT_ACCEPT: {
+    code: 1010,
+    message: 'File type upload not accept',
+  },
+  RESOURCE_NOT_FOUND: {
+    code: 1011,
+    message: 'Resource not found',
+  },
+  LAYOUT_NOT_FOUND: {
+    code: 1012,
+    message: 'Layout default not found!',
+  },
+  USER_NOT_FOUND: {
+    code: 1013,
+    message: 'User not found!',
+  },
+  PRODUCT_NOT_FOUND: {
+    code: 1014,
+    message: 'Product not found!',
   },
 };

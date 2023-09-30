@@ -3,7 +3,7 @@ import { DistributorsService } from './distributors.service';
 import { CreateDistributorDto } from './dto/create-distributor.dto';
 import { FindAllRequestDto } from '@module/author/dto/find-all-request.dto';
 
-@Controller('distributor')
+@Controller('admin/distributor')
 export class DistributorsController {
   constructor(private readonly distributorsService: DistributorsService) {}
 
