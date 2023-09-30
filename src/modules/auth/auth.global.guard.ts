@@ -21,7 +21,7 @@ export class DefaultAuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
 
-    if (!this.validateRequest(requestUrl, token)) {
+    if (!(await this.validateRequest(requestUrl, token))) {
       throw new ForbiddenException();
     }
 
@@ -33,19 +33,24 @@ export class DefaultAuthGuard implements CanActivate {
     return type === 'token' ? token : undefined;
   }
 
-  private validateRequest(path: string, token: string): boolean {
-    if (path.includes('admin')) {
-      this.userService.validateAdminToken(token);
-      return this.validateAdminPath(token);
+  private async validateRequest(path: string, token: string): Promise<boolean> {
+    try {
+      if (path.includes('admin')) {
+        await this.userService.validateAdminToken(token);
+        return this.validateAdminPath(token);
+      }
+      if (path.includes('api/user/')) {
+        await this.userService.validateClientToken(token);
+        return this.validateClientPath(token);
+      }
+      return token === process.env.HARD_TOKEN;
+    } catch (error) {
+      console.error(error);
+      throw new ForbiddenException();
     }
-    if (path.includes('api/user/')) {
-      this.userService.validateClientToken(token);
-      return this.validateClientPath(token);
-    }
-    return token === process.env.HARD_TOKEN;
   }
 
-  private validateAdminPath(token: string): boolean {
+  private async validateAdminPath(token: string): Promise<boolean> {
     const userData = this.userService.getUserDataFromToken(token);
     if (!userData) {
       throw new ForbiddenException();
