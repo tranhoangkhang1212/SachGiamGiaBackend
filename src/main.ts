@@ -9,19 +9,21 @@ import { config } from 'dotenv';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  config({ path: `${process.env.NODE_ENV}.env` });
+  const { NODE_ENV, PORT, CORS_ALLOWED_ORIGINS } = process.env;
+  config({ path: `${NODE_ENV}.env` });
+
+  console.log('*******************ENV****************', { NODE_ENV, PORT, CORS_ALLOWED_ORIGINS });
 
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix('api');
   app.useGlobalGuards(new DefaultAuthGuard(app.get(UsersService)));
   app.useGlobalFilters(new HttpExceptionFilter());
   app.enableCors({
-    origin: process.env.CORS_ALLOWED_ORIGINS.split(','),
+    origin: CORS_ALLOWED_ORIGINS.split(','),
   });
 
-  const port = process.env.PORT;
-  await app.listen(port);
+  await app.listen(PORT);
 
-  console.log(`App running on PORT: ${port}`);
+  console.log(`App running on PORT: ${PORT}`);
 }
 bootstrap();
