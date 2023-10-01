@@ -13,6 +13,7 @@ RUN yarn install
 # RUN npm ci --only=production
 
 ENV NODE_ENV=production
+ENV CORS_ALLOWED_ORIGINS=https://sachgiamgia.vn,https://sachgiamgia.online
 
 # Bundle app source
 COPY . .
