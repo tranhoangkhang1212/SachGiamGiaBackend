@@ -28,3 +28,4 @@ docker run -d --name ${container_name} -p 8080:3001 sach_giam_gia_be
 # Kiểm tra xem container có đang chạy không
 if [ $? -eq 0 ]; then
   echo "Docker container running on PORT 8080"
+fi
