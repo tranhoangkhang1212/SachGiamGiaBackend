@@ -18,6 +18,8 @@ import { FileUploadModule } from './modules/file-upload/file-upload.module';
 import { ResourceModule } from './modules/resource/resource.module';
 import { LayoutModule } from './modules/layout/layout.module';
 import { AdminUserModule } from './modules/admin-user/admin-user.module';
+import { HashService } from './modules/hash/hash.service';
+import { HashModule } from './modules/hash/hash.module';
 
 @Module({
   imports: [
@@ -39,6 +41,7 @@ import { AdminUserModule } from './modules/admin-user/admin-user.module';
     ResourceModule,
     LayoutModule,
     AdminUserModule,
+    HashModule,
   ],
   controllers: [AppController],
   providers: [
@@ -47,6 +50,7 @@ import { AdminUserModule } from './modules/admin-user/admin-user.module';
       provide: APP_GUARD,
       useClass: DefaultAuthGuard,
     },
+    HashService,
   ],
   exports: [AppService],
 })

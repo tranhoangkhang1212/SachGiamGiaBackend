@@ -1,7 +1,7 @@
 import { BaseEntityApp } from '@common/entities';
 import { Column, Entity } from 'typeorm';
 
-@Entity('admin-user')
+@Entity('admin_user')
 export class AdminUser extends BaseEntityApp {
   @Column({ type: 'varchar', name: 'name', nullable: false })
   name: string;

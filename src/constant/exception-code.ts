@@ -18,7 +18,9 @@ export type TErrorKey =
   | 'RESOURCE_NOT_FOUND'
   | 'LAYOUT_NOT_FOUND'
   | 'USER_NOT_FOUND'
-  | 'PRODUCT_NOT_FOUND';
+  | 'PRODUCT_NOT_FOUND'
+  | 'EMAIL_INVALID'
+  | 'PASSWORD_INVALID';
 
 export const ExceptionCode: Record<TErrorKey, IExceptionMsg> = {
   DEFAULT_ERROR_MESSAGE: {
@@ -80,5 +82,13 @@ export const ExceptionCode: Record<TErrorKey, IExceptionMsg> = {
   PRODUCT_NOT_FOUND: {
     code: 1014,
     message: 'Product not found!',
+  },
+  EMAIL_INVALID: {
+    code: 1016,
+    message: 'Email Invalid!',
+  },
+  PASSWORD_INVALID: {
+    code: 1017,
+    message: 'Password Invalid!',
   },
 };

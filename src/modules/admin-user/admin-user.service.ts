@@ -1,5 +1,4 @@
 import { BaseService } from '@common/services/base.service';
-import { AuthService } from '@module/auth/auth.service';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -10,6 +9,7 @@ import { SignInRequestDto } from './dto/sign-in-request.dto';
 import { SignInResponseDto } from './dto/sign-in-response.dto';
 import { TokenPayloadDto } from './dto/token-payload.dto';
 import { AdminUser } from './entities/admin-user.entity';
+import { HashService } from '@module/hash/hash.service';
 
 @Injectable()
 export class AdminUserService extends BaseService {
@@ -17,7 +17,7 @@ export class AdminUserService extends BaseService {
     @InjectRepository(AdminUser)
     private adminUserRepository: AdminUserRepository,
     private jwtService: JwtService,
-    private authService: AuthService,
+    private hashService: HashService,
   ) {
     super();
     this._entity = AdminUser;
@@ -33,16 +33,27 @@ export class AdminUserService extends BaseService {
     }
 
     const { name, userName, email } = requestDto;
-    const password = this.jwtService.sign(requestDto.password);
+    const password = this.hashService.hashPassword(requestDto.password);
     await this.createAndSave({ name, userName, email, password, token: null });
   }
 
   async signIn(requestDto: SignInRequestDto): Promise<SignInResponseDto> {
+    if (!requestDto.email) {
+      throw new RequestInvalidException('EMAIL_INVALID');
+    }
+    if (!requestDto.password) {
+      throw new RequestInvalidException('PASSWORD_INVALID');
+    }
+
     const user = await this.adminUserRepository.findOne({
       where: [{ email: requestDto.email }],
     });
+
     if (!user) {
       throw new RequestInvalidException('USER_NOT_FOUND');
+    }
+    if (!this.hashService.verifyPassword(requestDto.password, user.password)) {
+      throw new RequestInvalidException('PASSWORD_INVALID');
     }
 
     const payload = { id: user.id };
