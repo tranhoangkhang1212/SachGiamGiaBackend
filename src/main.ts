@@ -18,15 +18,6 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.useGlobalGuards(new DefaultAuthGuard(app.get(UsersService)));
   app.useGlobalFilters(new HttpExceptionFilter());
-  app.enableCors({
-    origin: [
-      /^https:\/\/(?:[a-z0-9-]+\.)?sachgiamgia\.vn$/,
-      /^https:\/\/(?:[a-z0-9-]+\.)?sachgiamgia\.online$/,
-      'http://localhost:3000',
-      'http://localhost:3002',
-    ],
-    credentials: true,
-  });
 
   await app.listen(PORT);
 
