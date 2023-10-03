@@ -18,14 +18,6 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.useGlobalGuards(new DefaultAuthGuard(app.get(UsersService)));
   app.useGlobalFilters(new HttpExceptionFilter());
-  const options = {
-    origin: '*',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
-    credentials: true,
-  };
-  //app.use(cors(options))
   app.enableCors(options);
 
   await app.listen(PORT);
