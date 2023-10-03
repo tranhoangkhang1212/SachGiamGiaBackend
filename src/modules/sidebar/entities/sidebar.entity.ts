@@ -1,5 +1,6 @@
 import { BaseEntityApp } from '@common/entities';
 import { ESidebarType } from 'src/constant/enum/sidebar-enum';
+import { EStatus } from 'src/constant/enum/status-eum';
 import { Column, Entity } from 'typeorm';
 
 @Entity('side_bar')
@@ -30,4 +31,7 @@ export class Sidebar extends BaseEntityApp {
 
   @Column({ type: 'varchar', default: ESidebarType.Primary, name: 'type', nullable: true })
   type: ESidebarType;
+
+  @Column({ type: 'varchar', name: 'status', nullable: true })
+  status: EStatus = EStatus.Enable;
 }

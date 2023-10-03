@@ -13,7 +13,6 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateHomeProductDto } from './dto/create-home-product.dto';
 import { UpdateBannerRequestDto } from './dto/update-banner-request.dto';
 import { LayoutService } from './layout.service';
-import { UpdateHomeProductShowRequestDto } from './dto/update-home-product-request.dto';
 
 @Controller('admin/layout')
 export class AdminLayoutController {
