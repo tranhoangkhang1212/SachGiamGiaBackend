@@ -29,6 +29,7 @@ export class CreateTableProduct1694597164907 implements MigrationInterface {
           { name: 'total_view', type: 'int8', isNullable: false, default: 0 },
           { name: 'total_buy', type: 'int8', isNullable: false, default: 0 },
           { name: 'star', type: 'int4', isNullable: false, default: 0 },
+          { name: 'status', type: 'varchar', isNullable: false },
           { name: 'description', type: 'varchar', isNullable: false },
           { name: 'statistics', type: 'varchar', isNullable: false },
           {
