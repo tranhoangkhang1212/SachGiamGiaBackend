@@ -18,7 +18,6 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.useGlobalGuards(new DefaultAuthGuard(app.get(UsersService)));
   app.useGlobalFilters(new HttpExceptionFilter());
-  app.enableCors(options);
 
   await app.listen(PORT);
 
