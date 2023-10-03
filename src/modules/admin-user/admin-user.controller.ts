@@ -8,6 +8,7 @@ import { SignInRequestDto } from './dto/sign-in-request.dto';
 export class AdminUserController {
   constructor(private readonly adminUserService: AdminUserService) {}
 
+  @UseGuards(AdminGuard)
   @Post('register')
   async register(@Body() requestDto: RegisterRequestDto) {
     return this.adminUserService.register(requestDto);

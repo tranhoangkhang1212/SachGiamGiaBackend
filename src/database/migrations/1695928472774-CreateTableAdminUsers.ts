@@ -18,7 +18,7 @@ export class CreateTableAdminUsers1695928472774 implements MigrationInterface {
           { name: 'email', type: 'varchar', isNullable: false },
           { name: 'user_name', type: 'varchar', isNullable: false },
           { name: 'password', type: 'varchar', isNullable: false },
-          { name: 'token', type: 'varchar', isNullable: false },
+          { name: 'token', type: 'varchar', isNullable: true },
           {
             name: 'created_at',
             type: 'timestamp',

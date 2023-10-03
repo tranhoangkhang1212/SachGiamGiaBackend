@@ -18,7 +18,7 @@ export class DefaultAuthGuard implements CanActivate {
 
     const token = this.extractTokenFromHeader(request);
     if (!token) {
-      throw new ForbiddenException();
+      throw new UnauthorizedException();
     }
 
     if (!(await this.validateRequest(requestUrl, token))) {
