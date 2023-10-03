@@ -27,6 +27,7 @@ import { ImageModel } from './entities/images.model';
 import { Product } from './entities/product.entity';
 import { ProductRepository } from './product.repository';
 import { getTimeStamp } from 'src/utils/date-time-utils';
+import { validate as isValidUUID } from 'uuid';
 
 @Injectable()
 export class ProductService extends BaseService {
@@ -185,8 +186,11 @@ export class ProductService extends BaseService {
     return getPageResponse<ProductResponseDto>(requestBody, total, productsResult);
   }
 
-  async getProductDetail(slug: string): Promise<ProductDetailResponseDto> {
-    const query = 'Product.slug IN (:...values) OR Product.id IN (:...values)';
+  async getProductDetail(value: string): Promise<ProductDetailResponseDto> {
+    let query = 'Product.slug IN (:...values)';
+    if (isValidUUID(value)) {
+      query = 'Product.id IN (:...values)';
+    }
     const product = await this.productRepository
       .createQueryBuilder('Product')
       .select(this.paramsSelectAll)
@@ -194,7 +198,7 @@ export class ProductService extends BaseService {
       .innerJoin('Product.category', 'Category')
       .innerJoin('Product.publisher', 'Publisher')
       .innerJoin('Product.distributor', 'Distributor')
-      .where(query, { values: [slug] })
+      .where(query, { values: [value] })
       .getOne();
     if (!product) {
       throw new RequestInvalidException('PRODUCT_NOT_FOUND');

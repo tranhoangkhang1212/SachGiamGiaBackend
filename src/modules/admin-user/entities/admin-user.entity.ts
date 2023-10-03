@@ -6,13 +6,13 @@ export class AdminUser extends BaseEntityApp {
   @Column({ type: 'varchar', name: 'name', nullable: false })
   name: string;
 
-  @Column({ type: 'varchar', name: 'user_name', nullable: true })
+  @Column({ type: 'varchar', name: 'user_name', nullable: false })
   userName: string;
 
   @Column({ type: 'varchar', name: 'password', nullable: false })
   password: string;
 
-  @Column({ type: 'varchar', name: 'email', nullable: true })
+  @Column({ type: 'varchar', name: 'email', nullable: false })
   email: string;
 
   @Column({ type: 'varchar', name: 'token', nullable: true })
