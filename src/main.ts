@@ -15,14 +15,16 @@ async function bootstrap() {
   console.log('*******************ENV****************');
   console.log(NODE_ENV);
 
-  const options = {
-    origin: '*',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
-    credentials: true,
-  };
-  app.enableCors(options);
+  if (NODE_ENV === 'local') {
+    const options = {
+      origin: '*',
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+      preflightContinue: false,
+      optionsSuccessStatus: 204,
+      credentials: true,
+    };
+    app.enableCors(options);
+  }
 
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix('api');
