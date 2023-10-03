@@ -19,5 +19,7 @@ COPY . .
 
 RUN yarn build
 
+RUN yarn migration:up
+
 EXPOSE 3001
 CMD [ "node", "dist/main" ]

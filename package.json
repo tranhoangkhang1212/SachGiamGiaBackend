@@ -14,7 +14,7 @@
     "start:debug": "SET NODE_ENV=local&& nest start --debug --watch",
     "migration": "typeorm migration:create -d ./src/database/migrations/ -n",
     "migration:up:dev": "SET NODE_ENV=local&& ts-node ./node_modules/typeorm/cli.js migration:run ---config ./src/config/typeorm.config.ts",
-    "migration:up": "SET NODE_ENV=production ts-node ./node_modules/typeorm/cli.js migration:run ---config ./src/config/typeorm.config.ts",
+    "migration:up": "ts-node ./node_modules/typeorm/cli.js migration:run ---config ./src/config/typeorm.config.ts",
     "migration:down": "SET NODE_ENV=local&& ts-node ./node_modules/typeorm/cli.js migration:revert ---config ./src/config/typeorm.config.ts",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
