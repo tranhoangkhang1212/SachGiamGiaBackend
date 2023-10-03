@@ -23,9 +23,15 @@ export const generateFileUrl = (originalname: string) => {
   const { name, ext } = parse(originalname);
   const fileName = `${name}_${getTimeStamp()}${ext}`;
 
-  const protocol = env === 'local' ? 'http' : 'https';
-  const baseUrl = `${endPoint}:${port}/${bucketName}/${fileName}`;
-  const url = `${protocol}://${baseUrl}`;
+  if (env === 'local') {
+    const url = `http://${endPoint}:${port}/${bucketName}/${fileName}`;
+    return {
+      fileName,
+      url,
+      ext,
+    };
+  }
+  const url = `https://${endPoint}/${bucketName}/${fileName}`;
 
   return {
     fileName,
