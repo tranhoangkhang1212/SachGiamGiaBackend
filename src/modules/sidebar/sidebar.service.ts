@@ -27,6 +27,7 @@ import { SidebarPageResponseDto } from './dto/sidebar-page-response.dto';
 import { SidebarResponseDto } from './dto/sidebar-response.dto';
 import { Sidebar } from './entities/sidebar.entity';
 import { SidebarRepository } from './sidebar.repository';
+import { EStatus } from 'src/constant/enum/status-eum';
 
 @Injectable()
 export class SidebarService extends BaseService {
@@ -64,7 +65,7 @@ export class SidebarService extends BaseService {
     if (hasError) {
       throw new RequestInvalidException(errorMsgKey as TErrorKey);
     }
-    return this.createAndSave({ ...createSidebarDto });
+    return this.createAndSave({ ...createSidebarDto, status: EStatus.Enable });
   }
 
   async getAll(): Promise<SidebarResponseDto[]> {
