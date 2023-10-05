@@ -5,7 +5,7 @@ export class AddReplaceFunction1696097284200 implements MigrationInterface {
     await queryRunner.query(`CREATE EXTENSION IF NOT EXISTS unaccent;`);
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {
+  public async down(): Promise<void> {
     throw new Error('Method not implemented.');
   }
 }

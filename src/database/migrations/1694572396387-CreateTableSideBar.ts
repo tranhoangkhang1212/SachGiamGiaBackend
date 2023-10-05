@@ -48,7 +48,7 @@ export class CreateTableSideBar1694572396387 implements MigrationInterface {
     );
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {
+  public async down(): Promise<void> {
     throw new Error('Method not implemented.');
   }
 }

@@ -1,3 +1,4 @@
+import { BaseLayoutModel } from './entities/base-layout.model';
 import { BaseService } from '@common/services/base.service';
 import { AuthorResponse, ProductResponseDto, ShortProductResponseDto } from '@module/product/dto/products-response';
 import { Product } from '@module/product/entities/product.entity';
@@ -28,6 +29,7 @@ import { DistributorRepository } from '@module/distributors/distributor.reposito
 import { ProductRepository } from '@module/product/product.repository';
 import { In } from 'typeorm';
 import { SidebarPageResponseDto } from '@module/sidebar/dto/sidebar-page-response.dto';
+import { UpdateBaseLayoutRequestDto } from './dto/update-base-layout-request.dto';
 
 @Injectable()
 export class LayoutService extends BaseService {
@@ -212,11 +214,31 @@ export class LayoutService extends BaseService {
     return { productsResponse, authorResponse, categoryResponse, publishersResponse, distributorsResponse };
   }
 
-  getProductResponse(product: Product): ProductResponseDto {
+  async updateBaseLayout(requestDto: UpdateBaseLayoutRequestDto) {
+    const layout = await this.getLayout();
+    const baseLayout = layout.baseLayout;
+    await this.updateBaseLayoutHandler(baseLayout, requestDto);
+    return await this.layoutRepository.save(layout);
+  }
+
+  async getBaseLayout() {
+    return (await this.getLayout()).baseLayout;
+  }
+
+  private async updateBaseLayoutHandler(baseLayout: BaseLayoutModel, requestDto: UpdateBaseLayoutRequestDto) {
+    const keys = Object.keys(requestDto);
+    for (const key of keys) {
+      if (requestDto[key]) {
+        baseLayout[key] = requestDto[key];
+      }
+    }
+  }
+
+  private getProductResponse(product: Product): ProductResponseDto {
     return { ...product };
   }
 
-  getCondition(product: HomeProductModel) {
+  private getCondition(product: HomeProductModel) {
     const { products, authors, publishers, distributors } = product;
 
     const queryList = [];

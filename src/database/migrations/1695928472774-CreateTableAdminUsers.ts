@@ -43,7 +43,7 @@ export class CreateTableAdminUsers1695928472774 implements MigrationInterface {
     );
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {
+  public async down(): Promise<void> {
     throw new Error('Method not implemented.');
   }
 }

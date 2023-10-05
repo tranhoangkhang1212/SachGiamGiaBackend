@@ -8,7 +8,7 @@ export class FilterListProductRequestDto {
   values: string[];
 }
 
-export class SidebarSearchRequestDto extends PaginationDto {
+export class SearchRequestDto extends PaginationDto {
   @IsNotEmpty()
   slug: string;
   filters: FilterListProductRequestDto[] = [];

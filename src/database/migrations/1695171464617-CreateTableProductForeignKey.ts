@@ -35,7 +35,7 @@ export class CreateTableProductForeignKey1695171464617 implements MigrationInter
     await queryRunner.createForeignKey('product', distributorForeignKey);
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {
+  public async down(): Promise<void> {
     throw new Error('Method not implemented.');
   }
 }

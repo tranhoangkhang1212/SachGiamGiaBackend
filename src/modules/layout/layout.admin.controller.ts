@@ -13,6 +13,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateHomeProductDto } from './dto/create-home-product.dto';
 import { UpdateBannerRequestDto } from './dto/update-banner-request.dto';
 import { LayoutService } from './layout.service';
+import { UpdateBaseLayoutRequestDto } from './dto/update-base-layout-request.dto';
 
 @Controller('admin/layout')
 export class AdminLayoutController {
@@ -57,5 +58,15 @@ export class AdminLayoutController {
   @Put('banners/status')
   async updateBannersStatus(@Body() requestDto: UpdateBannerRequestDto) {
     return this.layoutService.updateBannersStatus(requestDto);
+  }
+
+  @Get('base-layout')
+  async getBaseLayout() {
+    return this.layoutService.getBaseLayout();
+  }
+
+  @Put('base-layout')
+  async updateBaseLayout(@Body() requestDto: UpdateBaseLayoutRequestDto) {
+    return this.layoutService.updateBaseLayout(requestDto);
   }
 }

@@ -40,7 +40,7 @@ export class CreateTableDistributors1695147499669 implements MigrationInterface 
     );
   }
 
-  down(queryRunner: QueryRunner): Promise<any> {
+  down(): Promise<any> {
     throw new Error('Method not implemented.');
   }
 }

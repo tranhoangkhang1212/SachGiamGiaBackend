@@ -56,7 +56,7 @@ export class CreateTableProduct1694597164907 implements MigrationInterface {
     );
   }
 
-  down(queryRunner: QueryRunner): Promise<any> {
+  down(): Promise<any> {
     throw new Error('Method not implemented.');
   }
 }

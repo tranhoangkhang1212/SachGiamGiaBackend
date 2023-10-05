@@ -40,7 +40,7 @@ export class CreateTableCategory1694598193853 implements MigrationInterface {
     );
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {
+  public async down(): Promise<void> {
     throw new Error('Method not implemented.');
   }
 }

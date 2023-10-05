@@ -38,7 +38,7 @@ export class ProductDetailResponseDto extends ProductResponseDto {
     this.totalView = product?.totalView;
     this.totalBuy = product?.totalBuy;
     this.star = product?.star;
-    this.description = product?.description;
+    this.description = product?.description || '';
     this.id = product?.id;
     this.name = product?.name;
     this.slug = product?.slug;
@@ -48,7 +48,7 @@ export class ProductDetailResponseDto extends ProductResponseDto {
     this.price = product?.price;
     this.finalPrice = product?.finalPrice;
     this.saleOff = product?.saleOff;
-    this.statistics = product.statistics ? product.statistics : '';
+    this.statistics = product.statistics || '';
   }
 
   distributor: AuthorResponse;

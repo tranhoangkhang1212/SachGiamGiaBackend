@@ -18,10 +18,10 @@ import { SidebarRepository } from './../sidebar/sidebar.repository';
 import { CreateMultipleProductsRequestDto, CreateProductDto } from './dto/create-product.dto';
 import { DeleteProductRequestDto } from './dto/delete-product-request.dto';
 import { TSortType, priceValuesFilter } from './dto/filter-data-constant';
-import { FilterProductRequestDto, SearchProductRequestDto } from './dto/filter-product-request.dto';
+import { FilterProductList, FilterProductRequestDto, SearchProductRequestDto } from './dto/filter-product-request.dto';
 import { FindAllProductRequestDto, GetProductOptionRequestDto } from './dto/find-all-product-request.dto';
 import { ProductDetailResponseDto, ProductResponseDto, ShortProductResponseDto } from './dto/products-response';
-import { FilterListProductRequestDto, SidebarSearchRequestDto } from './dto/sidebar-search-request.dto';
+import { FilterListProductRequestDto, SearchRequestDto } from './dto/sidebar-search-request.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ImageModel } from './entities/images.model';
 import { Product } from './entities/product.entity';
@@ -116,7 +116,7 @@ export class ProductService extends BaseService {
     return productsCreated;
   }
 
-  async findAllForSidebar(requestBody: SidebarSearchRequestDto): Promise<PaginationResponseDto<ProductResponseDto>> {
+  async findAllForSidebar(requestBody: SearchRequestDto): Promise<PaginationResponseDto<ProductResponseDto>> {
     const sidebar = await this.sidebarRepository.findOne({ where: { slug: requestBody.slug } });
     if (!sidebar) {
       throw new RequestInvalidException('SIDE_BAR_NOT_FOUND');
@@ -143,7 +143,13 @@ export class ProductService extends BaseService {
     ];
 
     const pagination = getSkipAndTake(requestBody.page, requestBody.pageSize);
-    const { query, parameters } = this.conditionHandler(sidebar);
+    const { query, parameters } = this.conditionHandler({
+      authors: sidebar.authors,
+      products: sidebar.products,
+      publishers: sidebar.publishers,
+      categories: sidebar.category,
+      distributors: sidebar.distributors,
+    });
     const moreCondition = this.moreConditionHandler(requestBody.filters);
     const { field, order } = this.getSortOrder(requestBody.sort);
 
@@ -174,7 +180,7 @@ export class ProductService extends BaseService {
         .where(query, parameters)
         .andWhere(moreCondition.query, moreCondition.parameters)
         .andWhere('Product.status = :status', { status: EStatus.Enable })
-        .orderBy({ 'Product.totalView': 'DESC' })
+        .orderBy({ [field]: order as TSortType })
         .take(pagination.take)
         .skip(pagination.skip)
         .getManyAndCount();
@@ -203,6 +209,9 @@ export class ProductService extends BaseService {
     if (!product) {
       throw new RequestInvalidException('PRODUCT_NOT_FOUND');
     }
+
+    const description = await this.fileUploadService.getFileContentFromS3(product.description);
+    product.description = description;
     return new ProductDetailResponseDto(product);
   }
 
@@ -298,24 +307,63 @@ export class ProductService extends BaseService {
       .getMany();
   }
 
-  async searchProducts(request: SearchProductRequestDto) {
-    const { keyword } = request;
+  async searchProducts(requestBody: SearchProductRequestDto) {
+    const { keyword } = requestBody;
     if (!keyword) {
       return [];
     }
-    const products = await this.productRepository
+
+    const { take, skip } = getSkipAndTake(requestBody.page, requestBody.pageSize);
+    const { query, parameters } = this.moreConditionHandler(requestBody.filters);
+    const { field, order } = this.getSortOrder(requestBody.sort);
+
+    const [products, count] = await this.productRepository
       .createQueryBuilder()
       .select([
         'Product.id',
+        'Product.author',
         'Product.name',
         'Product.price',
         'Product.saleOff',
         'Product.finalPrice',
         'Product.images',
+        'Product.slug',
+        'Product.createdAt',
       ])
+      .innerJoin('Product.author', 'Author')
       .where('unaccent(Product.name) ILIKE unaccent(:keyword)', { keyword: `%${unorm.nfkd(keyword)}%` })
-      .getMany();
-    return products;
+      .orderBy({ [field]: order as TSortType })
+      .take(take)
+      .skip(skip)
+      .getManyAndCount();
+
+    let productsResult = this.responseHandler([...products]);
+    let total = count;
+    if (query) {
+      const [products, count] = await this.productRepository
+        .createQueryBuilder()
+        .select([
+          'Product.id',
+          'Product.author',
+          'Product.name',
+          'Product.price',
+          'Product.saleOff',
+          'Product.finalPrice',
+          'Product.images',
+          'Product.slug',
+          'Product.createdAt',
+        ])
+        .innerJoin('Product.author', 'Author')
+        .where('unaccent(Product.name) ILIKE unaccent(:keyword)', { keyword: `%${unorm.nfkd(keyword)}%` })
+        .andWhere(query, parameters)
+        .orderBy({ [field]: order as TSortType })
+        .take(take)
+        .skip(skip)
+        .getManyAndCount();
+      total = count;
+      productsResult = this.responseHandler([...products]);
+    }
+    return getPageResponse<ProductResponseDto>(requestBody, total, productsResult);
   }
 
   responseHandler(products: Product[]): ProductResponseDto[] {
@@ -356,28 +404,30 @@ export class ProductService extends BaseService {
     return { parameters, query };
   }
 
-  conditionHandler(sidebar: Sidebar) {
+  conditionHandler(filters: FilterProductList) {
     let parameters = {};
     const queryList = [];
-    if (sidebar.category.length > 0) {
-      queryList.push('Product.category IN (:...category)');
-      parameters = { ...parameters, category: sidebar.category };
+
+    const { authors, categories, products, distributors, publishers } = filters;
+    if (categories.length > 0) {
+      queryList.push('Product.category IN (:...categories)');
+      parameters = { ...parameters, categories };
     }
-    if (sidebar.products.length > 0) {
+    if (products.length > 0) {
       queryList.push('Product.id IN (:...products)');
-      parameters = { ...parameters, products: sidebar.products };
+      parameters = { ...parameters, products };
     }
-    if (sidebar.authors.length > 0) {
+    if (authors.length > 0) {
       queryList.push('Product.author IN (:...authors)');
-      parameters = { ...parameters, authors: sidebar.authors };
+      parameters = { ...parameters, authors };
     }
-    if (sidebar.publishers.length > 0) {
+    if (publishers.length > 0) {
       queryList.push('Product.publisher IN (:...publishers)');
-      parameters = { ...parameters, publishers: sidebar.publishers };
+      parameters = { ...parameters, publishers };
     }
-    if (sidebar.distributors.length > 0) {
+    if (distributors.length > 0) {
       queryList.push('Product.distributor IN (:...distributors)');
-      parameters = { ...parameters, distributors: sidebar.distributors };
+      parameters = { ...parameters, distributors };
     }
 
     let query = '';

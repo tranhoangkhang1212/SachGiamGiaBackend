@@ -14,4 +14,9 @@ export class LayoutController {
   async getBannersShow() {
     return this.layoutService.getBannersShow();
   }
+
+  @Get('base-layout')
+  async getBaseLayout() {
+    return this.layoutService.getBaseLayout();
+  }
 }

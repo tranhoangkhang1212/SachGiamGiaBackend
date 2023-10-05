@@ -40,7 +40,7 @@ export class CreateTableAuthor1694602071953 implements MigrationInterface {
     );
   }
 
-  down(queryRunner: QueryRunner): Promise<any> {
+  down(): Promise<any> {
     throw new Error('Method not implemented.');
   }
 }

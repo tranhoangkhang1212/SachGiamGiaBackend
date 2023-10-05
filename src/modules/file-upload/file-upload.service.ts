@@ -59,7 +59,20 @@ export class FileUploadService {
     }
   }
 
-  async getJsonFileFromMinio(fileName: string): Promise<Buffer | null> {
+  async getFileContentFromS3(fileName: string) {
+    try {
+      const fileBuffer = await this.getBufferFileFromMinio(fileName);
+      if (fileBuffer !== null) {
+        return fileBuffer.toString('utf-8');
+      } else {
+        console.log('File not found or error occurred while fetching the file.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
+  async getBufferFileFromMinio(fileName: string): Promise<Buffer | null> {
     try {
       const bucketName = this.getConfig().bucketName;
       const dataStream = await this.minioClient.getObject(bucketName, fileName);

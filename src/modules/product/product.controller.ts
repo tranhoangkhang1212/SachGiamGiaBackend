@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Query } from '@nestjs/common';
 import { FilterProductRequestDto, SearchProductRequestDto } from './dto/filter-product-request.dto';
 import { FindAllProductRequestDto } from './dto/find-all-product-request.dto';
-import { SidebarSearchRequestDto } from './dto/sidebar-search-request.dto';
+import { SearchRequestDto } from './dto/sidebar-search-request.dto';
 import { ProductService } from './product.service';
 
 @Controller('product')
@@ -25,7 +25,7 @@ export class ProductController {
 
   @Post('side-bar')
   @HttpCode(HttpStatus.OK)
-  getForSidebar(@Body() requestBody: SidebarSearchRequestDto) {
+  getForSidebar(@Body() requestBody: SearchRequestDto) {
     return this.productService.findAllForSidebar(requestBody);
   }
 
@@ -39,8 +39,8 @@ export class ProductController {
     return this.productService.getByCategory(request);
   }
 
-  @Get('search')
-  searchProducts(@Query() request: SearchProductRequestDto) {
+  @Post('search')
+  searchProducts(@Body() request: SearchProductRequestDto) {
     return this.productService.searchProducts(request);
   }
 }
